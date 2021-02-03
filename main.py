@@ -109,7 +109,7 @@ def main():
     dispatcher.add_handler(CommandHandler("about", about))
     dispatcher.add_handler(MessageHandler(Filters.text, dp))
     # log all errors
-    dp.add_error_handler(error)
+    dispatcher.add_error_handler(error)
     # Start the Bot
     updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
     HOST_NAME = os.environ.get("HOST_NAME")
