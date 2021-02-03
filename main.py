@@ -9,9 +9,6 @@ from telegram.ext.handler import Handler
 
 L = Instaloader()
 
-TOKEN = os.environ.get("BOT_TOKEN")
-chat_id = os.environ.get("CHANNEL_ID")
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,9 +27,9 @@ def start(update, context):
     context.bot.send_chat_action(
         chat_id=update.message.chat_id, action="typing")
     user = update.message.from_user
-    chat_member = context.bot.get_chat_member(
-        chat_id, user_id=update.message.chat_id)
-    status = chat_member["status"]
+    channel_member = context.bot.get_chat_member(
+        os.environ.get("CHANNEL_ID"), user_id=update.message.chat_id)
+    status = channel_member["status"]
     if(status == 'left'):
         context.bot.send_message(chat_id=update.message.chat_id,
                                  text=f"Hi {user.first_name}, to use me you have to be a member of the updates channel in order to stay updated with the latest developments.\nPlease click below button to join and /start the bot again.", reply_markup=help_reply_markup)
@@ -61,9 +58,9 @@ def help(update, context):
 
 def dp(update, context):
     user = update.message.from_user
-    chat_member = context.bot.get_chat_member(
-        chat_id, user_id=update.message.chat_id)
-    status = chat_member["status"]
+    channel_member = context.bot.get_chat_member(
+        os.environ.get("CHANNEL_ID"), user_id=update.message.chat_id)
+    status = channel_member["status"]
     if(status == 'left'):
         context.bot.send_message(chat_id=update.message.chat_id,
                                  text=f"Hi {user.first_name}, to use me you have to be a member of the updates channel in order to stay updated with the latest developments.\nPlease click below button to join and /start the bot again.", reply_markup=help_reply_markup)
@@ -98,7 +95,7 @@ def error(update, context):
 
 def main():
     updater = Updater(
-        token=TOKEN, use_context=True)
+        token=os.environ.get("BOT_TOKEN"), use_context=True)
     PORT = int(os.environ.get('PORT', '8443'))
     dispatcher = updater.dispatcher
     logger.info("Setting Up MessageHandler")
@@ -111,10 +108,11 @@ def main():
     # log all errors
     dispatcher.add_error_handler(error)
     # Start the Bot
-    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+    updater.start_webhook(listen="0.0.0.0", port=PORT,
+                          url_path=os.environ.get("BOT_TOKEN"))
     HOST_NAME = os.environ.get("HOST_NAME")
     updater.bot.set_webhook(
-        HOST_NAME + TOKEN)
+        HOST_NAME + os.environ.get("BOT_TOKEN"))
     logging.info("Starting Long Polling!")
     updater.idle()
 
