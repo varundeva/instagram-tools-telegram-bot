@@ -36,13 +36,11 @@ def start(update, context):
         return
     else:
         update.message.reply_html(welcome_msg)
-        context.bot.send_message(chat_id=update.message.chat_id,
-                                 text=f"Hi {user.first_name}!\nI'm Instagram Media Downloader Bot. I can help you to download Stories and IGTV Videos from any public instagram account.\nPlease read the /help before using me.", parse_mode=telegram.ParseMode.HTML, reply_markup=help_reply_markup)
 
 
 def contact(update, context):
     keyboard = [[InlineKeyboardButton(
-        "Contact", url="https://github.com/varundeva")], ]
+        "Contact", url="https://github.com/varundeva/instagram-tools-telegram-bot/")], ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(
         'Nothing Much. Code Availble on Github', reply_markup=reply_markup)
