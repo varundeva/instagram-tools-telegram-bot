@@ -97,7 +97,6 @@ def main():
     PORT = int(os.environ.get('PORT', '8443'))
     dispatcher = updater.dispatcher
     logger.info("Setting Up MessageHandler")
-
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("contact", contact))
     dispatcher.add_handler(CommandHandler("help", help))
@@ -108,9 +107,8 @@ def main():
     # Start the Bot
     updater.start_webhook(listen="0.0.0.0", port=PORT,
                           url_path=os.environ.get("BOT_TOKEN"))
-    HOST_NAME = os.environ.get("HOST_NAME")
     updater.bot.set_webhook(
-        HOST_NAME + os.environ.get("BOT_TOKEN"))
+        os.environ.get("HOST_NAME") + os.environ.get("BOT_TOKEN"))
     logging.info("Starting Long Polling!")
     updater.idle()
 
