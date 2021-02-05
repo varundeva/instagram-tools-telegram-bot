@@ -1,11 +1,11 @@
-import logging
-import os
-import telegram
-from instaloader import Instaloader, Profile, Post
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext.handler import Handler
-
+from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from instaloader import Instaloader, Profile, Post
+import re
+import telegram
+import os
+import logging
 
 L = Instaloader()
 
@@ -64,11 +64,21 @@ def dp(update, context):
                                  text=f"Hi {user.first_name}, to use me you have to be a member of the updates channel in order to stay updated with the latest developments.\nPlease click below button to join and /start the bot again.", reply_markup=help_reply_markup)
         return
     else:
+        # Get username/string from the message
         query = update.message.text
+        originalQuery = query
+        # To Check given username starts from '/'
         if query[0] == "/":
             update.message.reply_text(
                 "Username Should Not Start from '/'\nEnter a Valid Instagram User Name")
             return
+        # To check given username starts from '@' if it's true then remove the @ from beginning
+        if query[0] == '@':
+            query = query[1:]
+        # To check given username in url format. if its true extract username from url
+        if "instagram.com" in query:
+            splittedUrl = re.split(r'[/?]', query)
+            query = splittedUrl[3]
         msg = update.message.reply_text("Downloading...")
         chat_id = update.message.chat_id
         try:
@@ -83,7 +93,7 @@ def dp(update, context):
 
         except Exception:
             msg.edit_text(
-                f'''Something Went Wrong..\nMaybe Username {query}  not Available..''')
+                f'''Something Went Wrong..\nMaybe Username {originalQuery}  not Available..''')
 
 
 def error(update, context):
