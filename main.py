@@ -96,6 +96,38 @@ def dp(update, context):
                 f'''Something Went Wrong..\nMaybe Username {originalQuery}  not Available..''')
 
 
+def acc_type(val):
+    if(val):
+        return "Private"
+    else:
+        return "Public"
+
+
+def info(update, context):
+    query = update.message.text[6:]
+    context.bot.send_chat_action(
+        chat_id=update.message.chat_id, action="typing")
+    try:
+        user = Profile.from_username(L.context, query)
+        infoMsg = f'''
+<b>Account Information</b>
+Name - {user.full_name}
+UserName - {user.username}
+Bio  - {user.biography}
+Bio Url - {user.external_url}
+Followers - {user.followers}
+Following - {user.followees}
+Posts - {user.mediacount}
+IGTV Videos - {user.igtvcount}
+Account Type - {acc_type(user.is_private)}
+    '''
+        update.message.reply_photo(
+            photo=user.profile_pic_url, caption=infoMsg, parse_mode='HTML')
+    except:
+        update.message.reply_text(
+            f'''Something Went Wrong..\nMaybe Username {query}  not Available..''')
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -112,6 +144,8 @@ def main():
     dispatcher.add_handler(CommandHandler("help", help))
     dispatcher.add_handler(CommandHandler("about", about))
     dispatcher.add_handler(MessageHandler(Filters.text, dp))
+    dispatcher.add_handler(CommandHandler("info", info))
+
     # log all errors
     dispatcher.add_error_handler(error)
     # Start the Bot

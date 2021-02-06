@@ -1,0 +1,33 @@
+{
+    "name": "Instagram Tools Telegram Bot",
+    "description": "This bot will fetch instagram account details, downloads post",
+    "repository": "https://github.com/varundeva/instagram-tools-telegram-bot",
+    "keywords": [
+      "telegram",
+      "pyrogram",
+      "telegram bot"
+    ],
+    "env": {
+        "ENV": {
+            "description": "Set it to anything to enable configuration by environment variables.",
+            "value": "True"
+        },
+       "BOT_TOKEN": {
+        "description": "Your Bot token from @Botfather",
+        "value": ""
+      },
+      "CHANNEL_ID": {
+        "description": "Get Your Telegram Channel ID. know more at Readme file of repository",
+        "value": ""
+      },
+      "HOST_NAME": {
+        "description": "Your Host Name. that is heroku url for your app",
+        "value": ""
+      }
+     },
+     "buildpacks": [
+      {
+        "url": "heroku/python"
+      }
+    ]
+  }
