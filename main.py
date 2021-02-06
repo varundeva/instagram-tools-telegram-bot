@@ -143,8 +143,8 @@ def main():
     dispatcher.add_handler(CommandHandler("contact", contact))
     dispatcher.add_handler(CommandHandler("help", help))
     dispatcher.add_handler(CommandHandler("about", about))
-    dispatcher.add_handler(MessageHandler(Filters.text, dp))
     dispatcher.add_handler(CommandHandler("info", info))
+    dispatcher.add_handler(MessageHandler(Filters.text, dp))
 
     # log all errors
     dispatcher.add_error_handler(error)
